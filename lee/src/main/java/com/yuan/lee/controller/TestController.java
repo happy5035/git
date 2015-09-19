@@ -140,8 +140,4 @@ public class TestController {
 			}
 			return student;
 		}
-//		@RequestMapping(value="/info")
-//		public String info(){		
-//			return "/system/managerInfo";
-//		}
 }
