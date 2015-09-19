@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuan.lee.dao.RelationshipMapper" >
+  <resultMap id="BaseResultMap" type="com.yuan.lee.entity.Relationship" >
+    <id column="relationid" property="relationid" jdbcType="INTEGER" />
+    <result column="person1" property="person1" jdbcType="INTEGER" />
+    <result column="person2" property="person2" jdbcType="INTEGER" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    relationid, person1, person2, level
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from relationship
+    where relationid = #{relationid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from relationship
+    where relationid = #{relationid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yuan.lee.entity.Relationship" >
+    insert into relationship (relationid, person1, person2, 
+      level)
+    values (#{relationid,jdbcType=INTEGER}, #{person1,jdbcType=INTEGER}, #{person2,jdbcType=INTEGER}, 
+      #{level,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yuan.lee.entity.Relationship" >
+    insert into relationship
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="relationid != null" >
+        relationid,
+      </if>
+      <if test="person1 != null" >
+        person1,
+      </if>
+      <if test="person2 != null" >
+        person2,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="relationid != null" >
+        #{relationid,jdbcType=INTEGER},
+      </if>
+      <if test="person1 != null" >
+        #{person1,jdbcType=INTEGER},
+      </if>
+      <if test="person2 != null" >
+        #{person2,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yuan.lee.entity.Relationship" >
+    update relationship
+    <set >
+      <if test="person1 != null" >
+        person1 = #{person1,jdbcType=INTEGER},
+      </if>
+      <if test="person2 != null" >
+        person2 = #{person2,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=INTEGER},
+      </if>
+    </set>
+    where relationid = #{relationid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yuan.lee.entity.Relationship" >
+    update relationship
+    set person1 = #{person1,jdbcType=INTEGER},
+      person2 = #{person2,jdbcType=INTEGER},
+      level = #{level,jdbcType=INTEGER}
+    where relationid = #{relationid,jdbcType=INTEGER}
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from relationship
+    <if test="sortName != null" >
+      order by ${sortName}
+      <if test="sortOrder != null" >
+        ${sortOrder}
+      </if>
+    </if>
+  </select>
+  <select id="findByParams" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from relationship
+    <if test="sortName != null" >
+      order by ${sortName}
+      <if test="sortOrder != null" >
+        ${sortOrder}
+      </if>
+    </if>
+    <if test="pageSize != null and startNum != null" >
+      limit #{pageSize} offset #{startNum}
+    </if>
+  </select>
+  <select id="findByParamsCount" resultType="int" parameterType="map" >
+    select count(*) from relationship
+  </select>
+</mapper>
