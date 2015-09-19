@@ -54,21 +54,21 @@ public class Test2Controllor {
 		}
 		@ResponseBody
 		@RequestMapping(value="/getclassname")
-		public List<Map<String, Object>> getclassname(){
+		public List<Map<String, Object>> getclassname(Map<String, Object> map){
 			try {
-				List<ClassTest> list=classService.selectAll();
+				map.put("sortName", "name");
+				List<ClassTest> list=classService.findByParams(map);
 				Iterator<ClassTest> iter= list.listIterator();
 				List<Map<String, Object>> listname=new ArrayList<Map<String,Object>>();
 				while(iter.hasNext())
 				{
-
 					Map<String, Object> mapname=new HashMap<String,Object>();
 					ClassTest temp=iter.next();
 					String name=temp.getName();
-					mapname.put("id", temp.getId());
+					mapname.put("id", name);
 					mapname.put("name", name);
 					listname.add(mapname);
-					System.out.println(mapname.get("test")+"\n"+mapname.get("value"));
+					System.out.println(name+"\n");
 				}
 				return listname;
 			} catch (Exception e) {
@@ -150,6 +150,45 @@ public class Test2Controllor {
 				logger.error(e.getMessage());
 				result.put("errorMsg", "出现错误，请联系管理员！");
 			}
+			return result;
+		}
+		@ResponseBody
+		@RequestMapping(value="/{id}/deleteclass")
+		public Map<String, Object> deleteClass(@PathVariable("id")String id,Map<String, Object> map){
+			Map<String, Object> result = new HashMap<String, Object>();
+			try {
+				int row=0;
+				
+			map.put("classname", id);
+			List<Student> list=studentservice.findByParams(map);
+			Iterator<Student> iter= list.listIterator();
+			while(iter.hasNext())
+			{
+				Student temp=iter.next();
+				Integer studentid=temp.getId();
+				studentservice.deleteByPrimaryKey(studentid);
+			}
+			map.remove("classname");
+			map.put("name", id);
+			List<ClassTest> list1=classService.findByParams(map);
+			Iterator<ClassTest> iter1= list1.listIterator();
+			while(iter1.hasNext())
+			{
+				ClassTest temp=iter1.next();
+				Integer classid=temp.getId();
+				row=classService.deleteByPrimaryKey(classid);
+			}
+			System.out.println(row+"row\n");
+			 	if (row == 1) {
+					result.put("successMsg", "删除成功！");
+				}else {
+					result.put("errorMsg", "出现错误，请联系管理员！");
+				}
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+				result.put("errorMsg", "出现错误，请联系管理员！");
+			}
+			System.out.println(result+"\n");
 			return result;
 		}
 		@ResponseBody

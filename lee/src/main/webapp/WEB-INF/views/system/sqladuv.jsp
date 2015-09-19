@@ -19,20 +19,22 @@
 </head>
 <body>
 <div style="padding-top:15px; padding-left:5px; padding-right:15px; ">	
-		 
-			<div id="managerSd" class="easyui-panel" title="查询条件" style="height:100px;padding:10px; margin-bottom:10px;" data-options="collapsible:true">
+			<div id="managerSd" class="easyui-panel" title="查询条件" style="height:120px;padding:10px; margin-bottom:10px;" data-options="collapsible:true">
 		       <form action="" id="managerSdForm"> 
 		       <div>
 		        	   姓名：<input type="text" id="name" name="name">
 	                                                          班级：<input  class="easyui-combobox" type="text" id="classname" name="classname" method="post" 
-	                                                         data-options=>
+	                                                         >
 		       </div>           
 		        <div>
 		        	  电话：<input type="text" id="cellphone" name="cellphone">
 	                                                          邮箱：<input type="text" id="email" name="email">
-	                 <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="searchLoad()">查询</a>
+	                 
 		       </div>         
-	           
+	           <div>
+	           <a href="#" class="easyui-linkbutton" iconCls="icon-search" style="margin-top:5px;margin-left:220px" onclick="searchLoad()">查询</a>
+	            <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" style="margin-top:5px;margin-left:5px" onclick="deleteClass()">删除</a>
+	           </div>
 	            
 	            </form> 
 		    </div>  
@@ -74,14 +76,33 @@
         textField: 'name',
       })
 	
+	$('#classname').combobox({
+		onSelect:function(param){
+			console.log("%s",param.name);
+			searchLoad()
+		}
+	});
+	$('#studentInfoForm > #classname').combobox({
+		url: 'getclassname',
+        valueField: 'id',
+        textField: 'name',
+      });
+	$('.combo').click(function(){
+		$('#classname').combobox('reload');
+		console.log("test\n");
+	});
+	
 	//获得查询条件
 	function dgParams(){
 		 var params = {};  
 		    $.each($("#managerSdForm").serializeArray(), function(index) {
-		    	
+
 		    	if(this['value'] != ""){	
 		    		if(this['name'] == 'classname')
-		    			params['params['+this['name']+']'] = this['getvalue']; 
+		    			{
+		    			params['params['+this['name']+']'] = this['value']; 
+						console.log("%s,%s",this['name'],this['value']);
+						}
 		    		else
 		        		params['params['+this['name']+']'] = this['value'];  
 		    	}
@@ -150,10 +171,38 @@
             }
         });
     }
-    
+ function deleteClass(){
+	    $.each($("#managerSdForm").serializeArray(), function(index) {
+	    	if(this['value'] != "" && this['name'] == 'classname'){	
+					console.log("%s,%s",this['name'],this['value']);
+					var temp=this['value'];
+					$.messager.confirm('Confirm',
+							'确定删除该数据？',
+							function(r) {
+								if (r) {
+									$.post(temp+'/deleteclass',
+											function(result) {
+										if (result.successMsg) {
+											$.messager.show({
+							                    title: '操作成功',
+							                    msg: result.successMsg
+							                 });
+											$('#managerDg').datagrid('reload'); // reload the user data
+											
+										} else {
+											$.messager.show({ // show error message
+												title : 'Error',
+												msg : result.errorMsg
+											});
+										}
+									}, 'json');
+								}
+							});
+	    	}
+	    }); 
+ }   
 function destroyObj() {
 	var row = $('#managerDg').datagrid('getSelected');
-	console.log(row);
 	if (row) {
 		$.messager.confirm('Confirm',
 				'确定删除该数据？',

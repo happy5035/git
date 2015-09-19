@@ -18,7 +18,8 @@
         <div style="padding:10px 20px 20px 10px">
         <div class="ftitle">学生信息</div>
         <form id="studentInfoForm" name="studentInfoForm" method="post" >
-            <table>
+        <div>
+        <table id="studentInfotable" name="studenttable">
                 <tr>
                     <td>姓名:</td>
                     <td>
@@ -29,13 +30,13 @@
 				<tr>
                     <td>班级:</td>
                     <td>
-                    	<input class="easyui-validatebox textbox" type="text" name="classname" 
+                    	<input class="easyui-combobox" type="text" name="classname1" id="classname1" method="post"
 		                 data-options="" />
                     </td>
                 </tr>
 				<tr>
                     <td>电话:</td>
-                    <td><input class="easyui-validatebox textbox" type="text" name="cellphone" data-options=""></input></td>
+                    <td><input class="easyui-validatebox textbox" type="text" name="cellphone" ></input></td>
                 </tr>
                 <tr>
                 	<td>邮箱:</td>
@@ -43,9 +44,25 @@
                 </tr>
                
             </table>
+        </div>
+            
            
         </form>
         
         </div>
+        <script type="text/javascript">
+        function searchLoad1(){
+        	console.log("test1");
+        }
+        $('#classname1').combobox({
+    		url: 'getclassname',
+            valueField: 'id',
+            textField: 'name',
+          });
+        /* $('.combo').click(function(){
+    		$('#classname1').combobox('reload');
+    		console.log("test1\n");
+    	}); */
+       </script>
 </body>
 </html>

@@ -94,6 +94,19 @@
     select
     <include refid="Base_Column_List" />
     from t_class
+     where 1=1
+       <if test="id !=null">
+       and id= #{id,jdbcType=INTEGER} 
+       </if>
+       <if test="name !=null">
+       and name = #{name,jdbcType=VARCHAR}	
+       </if>
+       <if test="email !=null">
+      and  school = #{school,jdbcType=VARCHAR}  
+       </if>
+        <if test="cellphone !=null">
+       and studentnum = #{studentnum,jdbcType=INTEGER}
+       </if>
     <if test="sortName != null" >
       order by ${sortName}
       <if test="sortOrder != null" >
@@ -105,6 +118,20 @@
     </if>
   </select>
   <select id="findByParamsCount" resultType="int" parameterType="map" >
-    select count(*) from t_class
+    select count(*)
+      from t_class
+       where 1=1
+       <if test="id !=null">
+       and id= #{id,jdbcType=INTEGER} 
+       </if>
+       <if test="name !=null">
+       and name = #{name,jdbcType=VARCHAR}	
+       </if>
+       <if test="email !=null">
+      and  school = #{school,jdbcType=VARCHAR}  
+       </if>
+        <if test="cellphone !=null">
+       and studentnum = #{studentnum,jdbcType=INTEGER}
+       </if>
   </select>
 </mapper>
