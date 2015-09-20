@@ -20,6 +20,21 @@
     delete from t_class
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  <delete id="deleteByParams" parameterType="map">
+  delete from t_class where 1=1
+       <if test="id !=null">
+       and id= #{id,jdbcType=INTEGER} 
+       </if>
+       <if test="name !=null">
+       and name = #{name,jdbcType=VARCHAR}	
+       </if>
+       <if test="email !=null">
+      and  school = #{school,jdbcType=VARCHAR}  
+       </if>
+        <if test="cellphone !=null">
+       and studentnum = #{studentnum,jdbcType=INTEGER}
+       </if>
+  </delete>
   <insert id="insert" parameterType="com.yuan.lee.entity.ClassTest" >
     insert into t_class (id, name, school, 
       studentnum)

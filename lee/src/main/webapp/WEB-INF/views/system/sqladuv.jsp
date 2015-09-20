@@ -18,7 +18,7 @@
     	<link href="<c:url value="/static/css/font-awesome-4.2.0/css/font-awesome.min.css" />" rel="stylesheet">
 </head>
 <body>
-<div style="padding-top:15px; padding-left:5px; padding-right:15px; ">	
+<div style="padding-top:15px; padding-left:5px; padding-right:15px; ">
 			<div id="managerSd" class="easyui-panel" title="查询条件" style="height:120px;padding:10px; margin-bottom:10px;" data-options="collapsible:true">
 		       <form action="" id="managerSdForm"> 
 		       <div>
@@ -172,15 +172,15 @@
         });
     }
  function deleteClass(){
-	    $.each($("#managerSdForm").serializeArray(), function(index) {
-	    	if(this['value'] != "" && this['name'] == 'classname'){	
-					console.log("%s,%s",this['name'],this['value']);
-					var temp=this['value'];
+	/* alert("Value:"+$('#classname').combobox('getValue')); */
+		var classname=$('#classname').combobox('getValue');
+	    
+	    	if(classname !=""){	
 					$.messager.confirm('Confirm',
 							'确定删除该数据？',
 							function(r) {
 								if (r) {
-									$.post(temp+'/deleteclass',
+									$.post(classname+'/deleteclass',
 											function(result) {
 										if (result.successMsg) {
 											$.messager.show({
@@ -199,7 +199,6 @@
 								}
 							});
 	    	}
-	    }); 
  }   
 function destroyObj() {
 	var row = $('#managerDg').datagrid('getSelected');

@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,6 +43,12 @@ public class Test2Controllor {
 		@RequestMapping(value="/info")
 		public String myinfo(){		
 			return "/system/studentInfo";
+		}
+		@ResponseBody
+		@RequestMapping(value="/deletestudent")
+		public int delteparmas(Map<String, Object> map){	
+			map.put("name", "5003");
+			return classService.deleteByParams(map);
 		}
 		@RequestMapping(value="/mytest",method=RequestMethod.POST)
 		public String myTest(@RequestParam("username") String username,
@@ -157,28 +164,12 @@ public class Test2Controllor {
 		public Map<String, Object> deleteClass(@PathVariable("id")String id,Map<String, Object> map){
 			Map<String, Object> result = new HashMap<String, Object>();
 			try {
-				int row=0;
-				
+			
 			map.put("classname", id);
-			List<Student> list=studentservice.findByParams(map);
-			Iterator<Student> iter= list.listIterator();
-			while(iter.hasNext())
-			{
-				Student temp=iter.next();
-				Integer studentid=temp.getId();
-				studentservice.deleteByPrimaryKey(studentid);
-			}
+			studentservice.deleteByParams(map);
 			map.remove("classname");
 			map.put("name", id);
-			List<ClassTest> list1=classService.findByParams(map);
-			Iterator<ClassTest> iter1= list1.listIterator();
-			while(iter1.hasNext())
-			{
-				ClassTest temp=iter1.next();
-				Integer classid=temp.getId();
-				row=classService.deleteByPrimaryKey(classid);
-			}
-			System.out.println(row+"row\n");
+			int row=classService.deleteByParams(map);
 			 	if (row == 1) {
 					result.put("successMsg", "删除成功！");
 				}else {
