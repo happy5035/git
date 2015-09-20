@@ -30,7 +30,7 @@
 				<tr>
                     <td>班级:</td>
                     <td>
-                    	<input class="easyui-combobox" type="text" name="classname1" id="classname1" method="post"
+                    	<input class="easyui-combobox" type="text" name="classname" id="classname1" method="post"
 		                 data-options="" />
                     </td>
                 </tr>
